@@ -4,17 +4,16 @@ class Qnetwork():
     def __init__(self, s_size, a_size):
         self.a_size = a_size
         self.s_size = s_size
-        #self.layer_name = layer_name
         self.structure()
 
 
     def structure(self):
-        init = tf.glorot_normal_initializer()
-        self.input = tf.placeholder(dtype=tf.float32, shape=[None,self.s_size])
-        self.inputt = tf.truediv(self.input,[[180.0,180.0]])
+        init = tf.glorot_normal_initializer()#It draws samples from a truncated normal distribution centered on 0 with standard deviation
+        self.input = tf.placeholder(dtype=tf.float32, shape=[None,self.s_size])#placeholder is used for input data
+        self.inputt = tf.truediv(self.input,[[180.0,180.0]])#all integer arguments are cast to floating types first.
         self.W_1 = tf.get_variable(shape=[self.s_size,10], dtype=tf.float32, name='w1', initializer=init)
         self.b_1 = tf.get_variable(shape=[10], dtype=tf.float32, name='b1')
-        h_1 = tf.nn.relu(tf.matmul(self.inputt, self.W_1) + self.b_1)
+        h_1 = tf.nn.relu(tf.matmul(self.inputt, self.W_1) + self.b_1)#ReLU returns element-wise maximum of 0 and the input tensor values. relu activation function takes input x and returns output as per the the function max(0, x) .
         self.h_1_drop = tf.nn.dropout(h_1, keep_prob=0.75)
         self.W_2 = tf.get_variable(shape=[10,6], dtype=tf.float32, name='w2', initializer=init)
         self.b_2 = tf.get_variable(shape=[6], dtype=tf.float32, name='b2')
